@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Family Matters Law Group – Client Intake</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Oswald:wght@400;500;600&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink:   #FF1F8E;
+    --orange: #FF6B00;
+    --lime:   #C8D400;
+    --teal:   #00B5B8;
+    --black:  #0D0D0D;
+    --paper:  #F7F5F0;
+    --midgray:#888888;
+    --ltgray: #DDDDDD;
+    --white:  #ffffff;
+    --error:  #c0392b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--paper);
+    color: var(--black);
+    min-height: 100vh;
+  }
+
+  /* ── COLOR BAR ── */
+  .color-bar {
+    display: flex;
+    height: 8px;
+    width: 100%;
+  }
+  .color-bar span {
+    flex: 1;
+  }
+  .cb-pink   { background: var(--pink); }
+  .cb-orange { background: var(--orange); }
+  .cb-lime   { background: var(--lime); }
+  .cb-teal   { background: var(--teal); }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--black);
+    padding: 22px 40px 18px;
+  }
+  .header-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .firm-name {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 20px;
+    color: var(--white);
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+  }
+  .firm-name span { color: var(--pink); }
+  .firm-tagline {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--midgray);
+    margin-top: 4px;
+  }
+  .header-badge {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--teal);
+    border: 1px solid var(--teal);
+    padding: 5px 12px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  /* ── PROGRESS ── */
+  .progress-wrap {
+    background: #111;
+    padding: 14px 40px;
+  }
+  .progress-inner { max-width: 720px; margin: 0 auto; }
+  .progress-track {
+    height: 3px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--pink);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--midgray);
+  }
+  .progress-meta .step-name { color: var(--pink); }
+
+  /* ── MAIN ── */
+  .main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 44px 24px 100px;
+  }
+
+  /* ── SECTIONS ── */
+  .section { display: none; animation: fadeUp 0.3s ease; }
+  .section.active { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-eyebrow {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 34px;
+    color: var(--black);
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+  .section-title em { color: var(--pink); font-style: normal; }
+  .section-desc {
+    font-size: 14px;
+    color: var(--midgray);
+    line-height: 1.7;
+    max-width: 560px;
+    margin-bottom: 32px;
+  }
+
+  /* ── CASE TYPE CARDS ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .case-card {
+    border: 2px solid var(--ltgray);
+    border-radius: 8px;
+    padding: 18px 16px;
+    cursor: pointer;
+    background: var(--white);
+    transition: all 0.18s;
+    position: relative;
+    overflow: hidden;
+  }
+  .case-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: var(--pink);
+    transform: scaleY(0);
+    transition: transform 0.18s;
+    transform-origin: bottom;
+  }
+  .case-card:hover { border-color: var(--pink); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,31,142,0.12); }
+  .case-card:hover::before { transform: scaleY(1); }
+  .case-card.selected { border-color: var(--pink); background: rgba(255,31,142,0.04); }
+  .case-card.selected::before { transform: scaleY(1); }
+  .cc-icon  { font-size: 22px; margin-bottom: 10px; }
+  .cc-title { font-family: 'Oswald', sans-serif; font-size: 14px; font-weight: 600; color: var(--black); text-transform: uppercase; letter-spacing: 0.5px; }
+  .cc-sub   { font-size: 12px; color: var(--midgray); margin-top: 5px; line-height: 1.4; }
+
+  /* ── FORM FIELDS ── */
+  .field { margin-bottom: 20px; }
+  .field-row   { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .field-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+  label {
+    display: block;
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--black);
+    margin-bottom: 7px;
+  }
+  label .req  { color: var(--pink); margin-left: 2px; }
+  label .hint { display: block; font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--midgray); margin-top: 2px; }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="date"],
+  input[type="number"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--ltgray);
+    border-radius: 6px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    color: var(--black);
+    background: var(--white);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    -webkit-appearance: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--pink);
+    box-shadow: 0 0 0 3px rgba(255,31,142,0.08);
+  }
+  input.error, select.error, textarea.error { border-color: var(--error); }
+  textarea { resize: vertical; min-height: 90px; }
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 38px;
+  }
+
+  /* ── RADIO / CHECKBOX ── */
+  .radio-group, .check-group { display: flex; flex-direction: column; gap: 9px; }
+  .radio-group.inline, .check-group.inline { flex-direction: row; flex-wrap: wrap; }
+
+  .radio-opt, .check-opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    padding: 11px 14px;
+    border: 1.5px solid var(--ltgray);
+    border-radius: 6px;
+    background: var(--white);
+    font-size: 14px;
+    line-height: 1.4;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .radio-opt:hover, .check-opt:hover { border-color: var(--pink); }
+  .radio-opt.selected, .check-opt.selected { border-color: var(--pink); background: rgba(255,31,142,0.04); }
+  .radio-opt input, .check-opt input { margin-top: 2px; accent-color: var(--pink); flex-shrink: 0; width: 15px; height: 15px; }
+  .opt-label { font-weight: 600; font-size: 13px; }
+  .opt-sub   { font-size: 11px; color: var(--midgray); margin-top: 3px; }
+
+  /* ── CALLOUTS ── */
+  .callout {
+    border-left: 4px solid var(--teal);
+    background: rgba(0,181,184,0.07);
+    padding: 13px 16px;
+    border-radius: 0 6px 6px 0;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 18px;
+    color: var(--black);
+  }
+  .callout.pink {
+    border-color: var(--pink);
+    background: rgba(255,31,142,0.06);
+  }
+  .callout.orange {
+    border-color: var(--orange);
+    background: rgba(255,107,0,0.06);
+  }
+
+  /* ── SECTION DIVIDER ── */
+  .form-divider { border: none; border-top: 1px solid var(--ltgray); margin: 28px 0; }
+  .sub-section-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--teal);
+    display: inline-block;
+  }
+
+  /* ── REPEATER ── */
+  .repeater-item {
+    background: rgba(200,212,0,0.06);
+    border: 1.5px solid var(--ltgray);
+    border-left: 4px solid var(--lime);
+    border-radius: 0 6px 6px 0;
+    padding: 18px;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .remove-btn {
+    position: absolute; top: 10px; right: 12px;
+    background: none; border: none; cursor: pointer;
+    color: var(--midgray); font-size: 16px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: color 0.15s;
+    font-family: 'Nunito', sans-serif;
+  }
+  .remove-btn:hover { color: var(--error); }
+  .add-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px;
+    border: 1.5px dashed var(--teal);
+    border-radius: 6px;
+    background: none;
+    cursor: pointer;
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--teal);
+    transition: all 0.15s;
+    margin-top: 4px;
+  }
+  .add-btn:hover { background: rgba(0,181,184,0.08); border-color: var(--teal); }
+
+  /* ── NAVIGATION ── */
+  .nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 44px;
+    padding-top: 24px;
+    border-top: 2px solid var(--ltgray);
+  }
+  .btn-back {
+    padding: 12px 24px;
+    border: 1.5px solid var(--ltgray);
+    border-radius: 6px;
+    background: var(--white);
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--midgray);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-back:hover { border-color: var(--black); color: var(--black); }
+  .btn-next {
+    padding: 13px 32px;
+    background: var(--pink);
+    border: none;
+    border-radius: 6px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--white);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-next:hover { background: #e0006e; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(255,31,142,0.35); }
+  .btn-submit {
+    padding: 13px 32px;
+    background: var(--orange);
+    border: none;
+    border-radius: 6px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--white);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-submit:hover { background: #e05c00; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(255,107,0,0.35); }
+
+  /* ── VALIDATION ── */
+  .field-error { font-size: 12px; color: var(--error); margin-top: 5px; display: none; }
+  .field-error.show { display: block; }
+
+  /* ── SUMMARY ── */
+  .summary-section { margin-bottom: 28px; }
+  .summary-section-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--white);
+    background: var(--black);
+    padding: 7px 14px;
+    margin-bottom: 0;
+  }
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 9px 14px;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    background: var(--white);
+  }
+  .summary-row:nth-child(even) { background: var(--paper); }
+  .sk { color: var(--midgray); flex-shrink: 0; max-width: 44%; font-size: 12px; }
+  .sv { font-weight: 700; text-align: right; color: var(--black); }
+
+  .action-row {
+    display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px;
+  }
+  .copy-btn {
+    padding: 11px 20px;
+    background: var(--teal);
+    border: none;
+    border-radius: 6px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--white);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .copy-btn:hover { background: #009a9c; }
+  .copy-btn.black { background: var(--black); }
+  .copy-btn.black:hover { background: #333; }
+
+  /* ── COMPLETE ── */
+  .complete-wrap {
+    margin-top: 48px;
+    text-align: center;
+    padding: 40px 24px;
+    background: var(--white);
+    border-radius: 8px;
+    border-top: 4px solid var(--pink);
+  }
+  .complete-icon  { font-size: 44px; margin-bottom: 14px; }
+  .complete-title {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 28px;
+    color: var(--black);
+    margin-bottom: 12px;
+  }
+  .complete-desc {
+    font-size: 14px;
+    color: var(--midgray);
+    line-height: 1.8;
+    max-width: 440px;
+    margin: 0 auto 24px;
+  }
+  .firm-promises {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  .promise-badge {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 7px 16px;
+    border-radius: 4px;
+  }
+  .promise-badge.p  { background: var(--pink);   color: var(--white); }
+  .promise-badge.o  { background: var(--orange);  color: var(--white); }
+  .promise-badge.t  { background: var(--teal);    color: var(--white); }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    background: var(--black);
+    color: var(--midgray);
+    text-align: center;
+    padding: 18px 24px;
+    font-size: 11px;
+    font-family: 'Nunito', sans-serif;
+    margin-top: 60px;
+  }
+  .site-footer a { color: var(--teal); text-decoration: none; }
+
+  @media(max-width:600px){
+    .header { padding: 16px 20px; }
+    .progress-wrap { padding: 12px 20px; }
+    .main { padding: 28px 16px 80px; }
+    .field-row, .field-row-3 { grid-template-columns: 1fr; }
+    .card-grid { grid-template-columns: 1fr 1fr; }
+    .firm-promises { gap: 10px; }
+    .header-badge { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COLOR BAR -->
+<div class="color-bar">
+  <span class="cb-pink"></span>
+  <span class="cb-orange"></span>
+  <span class="cb-lime"></span>
+  <span class="cb-teal"></span>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <div class="firm-name">Family <span>Matters</span> Law Group, P.A.</div>
+      <div class="firm-tagline">Clarity. Options. Control.</div>
+    </div>
+    <div class="header-badge">Secure Client Intake</div>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-inner">
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:5%"></div></div>
+    <div class="progress-meta">
+      <span class="step-name" id="progressStep">Getting Started</span>
+      <span id="progressPct">5%</span>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- ══════════════════════════════════════
+       STEP 0 — CASE TYPE
+  ══════════════════════════════════════ -->
+  <div class="section active" id="sec-casetype">
+    <div class="section-eyebrow">Step 1 of 7</div>
+    <div class="section-title">What brings you <em>in today?</em></div>
+    <div class="section-desc">Select the option that best describes your situation. Your answer shapes everything that follows — so pick the one that fits.</div>
+
+    <div class="card-grid" id="caseTypeCards">
+      <div class="case-card" data-val="dissolution-petitioner" onclick="selectCard(this,'caseType')">
+        <div class="cc-icon">⚖️</div>
+        <div class="cc-title">Divorce</div>
+        <div class="cc-sub">I am filing for divorce</div>
+      </div>
+      <div class="case-card" data-val="dissolution-respondent" onclick="selectCard(this,'caseType')">
+        <div class="cc-icon">📋</div>
+        <div class="cc-title">Divorce</div>
+        <div class="cc-sub">I was served with divorce papers</div>
+      </div>
+      <div class="case-card" data-val="paternity-petitioner" onclick="selectCard(this,'caseType')">
+        <div class="cc-icon">👨‍👧</div>
+        <div class="cc-title">Paternity</div>
+        <div class="cc-sub">I am filing a paternity action</div>
+      </div>
+      <div class="case-card" data-val="paternity-respondent" onclick="selectCard(this,'caseType')">
+        <div class="cc-icon">📬</div>
+        <div class="cc-title">Paternity</div>
+        <div class="cc-sub">I was served with paternity papers</div>
+      </div>
+      <div class="case-card" data-val="modification" onclick="selectCard(this,'caseType')">
+        <div class="cc-icon">🔄</div>
+        <div class="cc-title">Modification</div>
+        <div class="cc-sub">Change existing child support or parenting plan</div>
+      </div>
+      <div class="case-card" data-val="other" onclick="selectCard(this,'caseType')">
+        <div class="cc-icon">📁</div>
+        <div class="cc-title">Other Matter</div>
+        <div class="cc-sub">Name change, adoption, or other</div>
+      </div>
+    </div>
+    <div class="field-error show" id="caseTypeErr" style="display:none;font-size:13px;margin-top:12px;">Please select a case type to continue.</div>
+
+    <div class="nav-bar">
+      <div></div>
+      <button class="btn-next" onclick="goNext('casetype')">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       STEP 1 — YOUR INFO
+  ══════════════════════════════════════ -->
+  <div class="section" id="sec-yourinfo">
+    <div class="section-eyebrow">Step 2 of 7</div>
+    <div class="section-title">Your <em>Information</em></div>
+    <div class="section-desc">Tell us about yourself. Fields marked <span style="color:var(--pink);font-weight:700">*</span> are required.</div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>First Name <span class="req">*</span></label>
+        <input type="text" id="clientFirst" placeholder="Jane" oninput="save('clientFirst',this.value)">
+        <div class="field-error" id="clientFirstErr">Required</div>
+      </div>
+      <div class="field">
+        <label>Last Name <span class="req">*</span></label>
+        <input type="text" id="clientLast" placeholder="Smith" oninput="save('clientLast',this.value)">
+        <div class="field-error" id="clientLastErr">Required</div>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Middle Name(s)</label>
+        <input type="text" id="clientMiddle" oninput="save('clientMiddle',this.value)">
+      </div>
+      <div class="field">
+        <label>Suffix <span class="hint">Jr / Sr / III etc.</span></label>
+        <input type="text" id="clientSuffix" oninput="save('clientSuffix',this.value)">
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Date of Birth <span class="req">*</span></label>
+        <input type="date" id="clientDOB" oninput="save('clientDOB',this.value)">
+        <div class="field-error" id="clientDOBErr">Required</div>
+      </div>
+      <div class="field">
+        <label>Gender <span class="req">*</span></label>
+        <select id="clientGender" onchange="save('clientGender',this.value)">
+          <option value="">Select...</option>
+          <option>Male</option><option>Female</option><option>Other / Prefer not to say</option>
+        </select>
+        <div class="field-error" id="clientGenderErr">Required</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Current Address <span class="req">*</span><span class="hint">Where you are currently living</span></label>
+      <input type="text" id="clientAddress" placeholder="123 Main St, City, FL 33000" oninput="save('clientAddress',this.value)">
+      <div class="field-error" id="clientAddressErr">Required</div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Cell Phone <span class="req">*</span></label>
+        <input type="tel" id="clientPhone" placeholder="(954) 555-0000" oninput="save('clientPhone',this.value)">
+        <div class="field-error" id="clientPhoneErr">Required</div>
+      </div>
+      <div class="field">
+        <label>Email Address <span class="req">*</span></label>
+        <input type="email" id="clientEmail" placeholder="you@example.com" oninput="save('clientEmail',this.value)">
+        <div class="field-error" id="clientEmailErr">Required</div>
+      </div>
+    </div>
+
+    <div id="nameRestorationBlock" style="display:none">
+      <hr class="form-divider">
+      <div class="field">
+        <label>Restoring a former or maiden name? <span class="req">*</span></label>
+        <div class="radio-group inline">
+          <label class="radio-opt" onclick="toggleOpt(this,'clientNameRestore','Yes');document.getElementById('nameRestoreInput').style.display='block'"><input type="radio" name="clientNameRestore" value="Yes"> <span class="opt-label">Yes</span></label>
+          <label class="radio-opt" onclick="toggleOpt(this,'clientNameRestore','No');document.getElementById('nameRestoreInput').style.display='none'"><input type="radio" name="clientNameRestore" value="No"> <span class="opt-label">No</span></label>
+        </div>
+      </div>
+      <div id="nameRestoreInput" style="display:none" class="field">
+        <label>Former / Maiden Name <span class="req">*</span></label>
+        <input type="text" id="clientMaidenName" oninput="save('clientMaidenName',this.value)">
+      </div>
+    </div>
+
+    <hr class="form-divider">
+    <div class="field">
+      <label>Active military duty? <span class="req">*</span></label>
+      <div class="radio-group inline">
+        <label class="radio-opt" onclick="toggleOpt(this,'clientMilitary','Yes')"><input type="radio" name="clientMilitary" value="Yes"> <span class="opt-label">Yes</span></label>
+        <label class="radio-opt" onclick="toggleOpt(this,'clientMilitary','No')"><input type="radio" name="clientMilitary" value="No"> <span class="opt-label">No</span></label>
+        <label class="radio-opt" onclick="toggleOpt(this,'clientMilitary','Veteran')"><input type="radio" name="clientMilitary" value="Veteran"> <span class="opt-label">Veteran (not active)</span></label>
+      </div>
+      <div class="field-error" id="clientMilitaryErr">Required</div>
+    </div>
+
+    <div class="nav-bar">
+      <button class="btn-back" onclick="goBack('yourinfo')">← Back</button>
+      <button class="btn-next" onclick="goNext('yourinfo')">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       STEP 2 — YOUR EMPLOYMENT
+  ══════════════════════════════════════ -->
+  <div class="section" id="sec-youremployment">
+    <div class="section-eyebrow">Step 3 of 7</div>
+    <div class="section-title">Your <em>Employment & Income</em></div>
+    <div class="section-desc">This information is used to calculate child support and alimony. Be as accurate as possible — estimates are fine.</div>
+
+    <div class="field">
+      <label>Currently employed? <span class="req">*</span></label>
+      <div class="radio-group inline">
+        <label class="radio-opt" onclick="toggleOpt(this,'clientEmployed','Yes');document.getElementById('clientEmpDetails').style.display='block'"><input type="radio" name="clientEmployed" value="Yes"> <span class="opt-label">Yes</span></label>
+        <label class="radio-opt" onclick="toggleOpt(this,'clientEmployed','No');document.getElementById('clientEmpDetails').style.display='none'"><input type="radio" name="clientEmployed" value="No"> <span class="opt-label">No</span></label>
+      </div>
+      <div class="field-error" id="clientEmployedErr">Required</div>
+    </div>
+
+    <div id="clientEmpDetails" style="display:none">
+      <div class="field-row">
+        <div class="field"><label>Employer Name <span class="req">*</span></label><input type="text" id="clientEmployer" oninput="save('clientEmployer',this.value)"></div>
+        <div class="field"><label>Job Title</label><input type="text" id="clientJobTitle" oninput="save('clientJobTitle',this.value)"></div>
+      </div>
+      <div class="field"><label>Employer Address</label><input type="text" id="clientEmpAddress" oninput="save('clientEmpAddress',this.value)"></div>
+      <div class="field-row">
+        <div class="field"><label>Employer Phone</label><input type="tel" id="clientEmpPhone" oninput="save('clientEmpPhone',this.value)"></div>
+        <div class="field">
+          <label>Employment Status <span class="req">*</span></label>
+          <select id="clientEmpStatus" onchange="save('clientEmpStatus',this.value)">
+            <option value="">Select...</option><option>Full-Time</option><option>Part-Time</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Gross Annual Income <span class="req">*</span></label><input type="text" id="clientIncome" placeholder="$0.00" oninput="save('clientIncome',this.value)"></div>
+        <div class="field">
+          <label>Pay Frequency <span class="req">*</span></label>
+          <select id="clientPayFreq" onchange="save('clientPayFreq',this.value)">
+            <option value="">Select...</option>
+            <option>Weekly</option><option>Bi-Weekly (every two weeks)</option>
+            <option>Semi-Monthly (twice a month)</option><option>Monthly</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <hr class="form-divider">
+    <div class="field">
+      <label>Check all that apply to your income:</label>
+      <div class="check-group">
+        <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="Self-employed"> <div><span class="opt-label">I am self-employed</span></div></label>
+        <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="Multiple income sources"> <div><span class="opt-label">I have more than one source of income</span></div></label>
+        <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="Cash or non-W2"> <div><span class="opt-label">I get paid in cash or non-W-2 income</span></div></label>
+        <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="Business owner"> <div><span class="opt-label">I am a business owner</span></div></label>
+        <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="None apply"> <div><span class="opt-label">None of the above</span></div></label>
+      </div>
+    </div>
+
+    <div class="nav-bar">
+      <button class="btn-back" onclick="goBack('youremployment')">← Back</button>
+      <button class="btn-next" onclick="goNext('youremployment')">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       STEP 3 — OTHER PARTY
+  ══════════════════════════════════════ -->
+  <div class="section" id="sec-otherparty">
+    <div class="section-eyebrow">Step 4 of 7</div>
+    <div class="section-title" id="otherPartyTitle">Spouse / <em>Other Party</em></div>
+    <div class="section-desc">Complete to the best of your knowledge. You won't be penalized for gaps — your attorney will fill those in.</div>
+
+    <div class="field-row">
+      <div class="field"><label>First Name <span class="req">*</span></label><input type="text" id="otherFirst" oninput="save('otherFirst',this.value)"><div class="field-error" id="otherFirstErr">Required</div></div>
+      <div class="field"><label>Last Name <span class="req">*</span></label><input type="text" id="otherLast" oninput="save('otherLast',this.value)"><div class="field-error" id="otherLastErr">Required</div></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Middle Name(s)</label><input type="text" id="otherMiddle" oninput="save('otherMiddle',this.value)"></div>
+      <div class="field"><label>Suffix</label><input type="text" id="otherSuffix" oninput="save('otherSuffix',this.value)"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Date of Birth <span class="req">*</span></label><input type="date" id="otherDOB" oninput="save('otherDOB',this.value)"><div class="field-error" id="otherDOBErr">Required</div></div>
+      <div class="field">
+        <label>Gender</label>
+        <select id="otherGender" onchange="save('otherGender',this.value)">
+          <option value="">Select...</option><option>Male</option><option>Female</option><option>Other / Unknown</option>
+        </select>
+      </div>
+    </div>
+    <div class="field"><label>Current Address <span class="hint">Where they currently live</span></label><input type="text" id="otherAddress" oninput="save('otherAddress',this.value)"></div>
+    <div class="field-row">
+      <div class="field"><label>Cell Phone</label><input type="tel" id="otherPhone" oninput="save('otherPhone',this.value)"></div>
+      <div class="field"><label>Email</label><input type="email" id="otherEmail" oninput="save('otherEmail',this.value)"></div>
+    </div>
+
+    <div id="flResidencyBlock" style="display:none">
+      <hr class="form-divider">
+      <div class="field">
+        <label>Is your spouse a Florida resident? <span class="req">*</span></label>
+        <div class="radio-group inline">
+          <label class="radio-opt" onclick="toggleOpt(this,'otherFLResident','Yes');document.getElementById('longArmBlock').style.display='none'"><input type="radio" name="otherFLResident" value="Yes"> <span class="opt-label">Yes</span></label>
+          <label class="radio-opt" onclick="toggleOpt(this,'otherFLResident','No');document.getElementById('longArmBlock').style.display='block'"><input type="radio" name="otherFLResident" value="No"> <span class="opt-label">No</span></label>
+        </div>
+      </div>
+      <div id="longArmBlock" style="display:none">
+        <div class="callout">To file in Florida, you need a basis for jurisdiction. Check all that apply — complete to the best of your knowledge.</div>
+        <div class="check-group">
+          <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="Matrimonial domicile in FL"> <div><span class="opt-label">You maintained a matrimonial domicile in Florida</span></div></label>
+          <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="Spouse previously resided in FL"> <div><span class="opt-label">Spouse previously resided in Florida</span></div></label>
+          <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="Spouse was permanent FL resident"> <div><span class="opt-label">Spouse was a permanent Florida resident</span></div></label>
+          <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="FL Homestead Exemption filed"> <div><span class="opt-label">Filed for Florida Homestead Exemption</span></div></label>
+          <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="Other FL residency indicators"> <div><span class="opt-label">Other indicators of Florida residency</span></div></label>
+        </div>
+      </div>
+    </div>
+
+    <hr class="form-divider">
+    <div class="sub-section-title" id="otherAttyTitle">Spouse's Attorney</div>
+    <div class="field">
+      <label>Does the other party have an attorney? <span class="req">*</span></label>
+      <div class="radio-group inline">
+        <label class="radio-opt" onclick="toggleOpt(this,'otherHasAtty','Yes');document.getElementById('otherAttyDetails').style.display='block'"><input type="radio" name="otherHasAtty" value="Yes"> <span class="opt-label">Yes</span></label>
+        <label class="radio-opt" onclick="toggleOpt(this,'otherHasAtty','No');document.getElementById('otherAttyDetails').style.display='none'"><input type="radio" name="otherHasAtty" value="No"> <span class="opt-label">No</span></label>
+        <label class="radio-opt" onclick="toggleOpt(this,'otherHasAtty','Unsure');document.getElementById('otherAttyDetails').style.display='none'"><input type="radio" name="otherHasAtty" value="Unsure"> <span class="opt-label">I'm not sure</span></label>
+      </div>
+      <div class="field-error" id="otherHasAttyErr">Required</div>
+    </div>
+    <div id="otherAttyDetails" style="display:none">
+      <div class="field-row">
+        <div class="field"><label>Firm Name</label><input type="text" id="otherAttyFirm" oninput="save('otherAttyFirm',this.value)"></div>
+        <div class="field"><label>Firm Phone</label><input type="tel" id="otherAttyPhone" oninput="save('otherAttyPhone',this.value)"></div>
+      </div>
+      <div class="field"><label>Firm Address</label><input type="text" id="otherAttyAddress" oninput="save('otherAttyAddress',this.value)"></div>
+      <div class="field"><label>Firm Email</label><input type="email" id="otherAttyEmail" oninput="save('otherAttyEmail',this.value)"></div>
+    </div>
+
+    <hr class="form-divider">
+    <div class="sub-section-title" id="otherEmpTitle">Spouse's Employment</div>
+    <div class="field">
+      <label>Is the other party employed?</label>
+      <div class="radio-group inline">
+        <label class="radio-opt" onclick="toggleOpt(this,'otherEmployed','Yes');document.getElementById('otherEmpBlock').style.display='block'"><input type="radio" name="otherEmployed" value="Yes"> <span class="opt-label">Yes</span></label>
+        <label class="radio-opt" onclick="toggleOpt(this,'otherEmployed','No');document.getElementById('otherEmpBlock').style.display='none'"><input type="radio" name="otherEmployed" value="No"> <span class="opt-label">No</span></label>
+        <label class="radio-opt" onclick="toggleOpt(this,'otherEmployed','Unsure');document.getElementById('otherEmpBlock').style.display='none'"><input type="radio" name="otherEmployed" value="Unsure"> <span class="opt-label">I'm not sure</span></label>
+      </div>
+    </div>
+    <div id="otherEmpBlock" style="display:none">
+      <div class="field-row">
+        <div class="field"><label>Employer Name</label><input type="text" id="otherEmployer" oninput="save('otherEmployer',this.value)"></div>
+        <div class="field"><label>Job Title</label><input type="text" id="otherJobTitle" oninput="save('otherJobTitle',this.value)"></div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Employment Status</label>
+          <select id="otherEmpStatus" onchange="save('otherEmpStatus',this.value)">
+            <option value="">Select...</option><option>Full-Time</option><option>Part-Time</option>
+          </select>
+        </div>
+        <div class="field"><label>Approx. Gross Annual Income</label><input type="text" id="otherIncome" placeholder="$0.00" oninput="save('otherIncome',this.value)"></div>
+      </div>
+      <div class="field">
+        <label>Pay Frequency</label>
+        <select id="otherPayFreq" onchange="save('otherPayFreq',this.value)">
+          <option value="">Select...</option><option>Weekly</option><option>Bi-Weekly</option><option>Semi-Monthly</option><option>Monthly</option>
+        </select>
+      </div>
+      <div class="field"><label>Additional employer info</label><textarea id="otherEmpNotes" oninput="save('otherEmpNotes',this.value)" placeholder="Multiple employers? Add details here."></textarea></div>
+    </div>
+
+    <div class="nav-bar">
+      <button class="btn-back" onclick="goBack('otherparty')">← Back</button>
+      <button class="btn-next" onclick="goNext('otherparty')">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       STEP 4 — CASE INFO
+  ══════════════════════════════════════ -->
+  <div class="section" id="sec-caseinfo">
+    <div class="section-eyebrow">Step 5 of 7</div>
+    <div class="section-title" id="caseInfoTitle">Marriage <em>Information</em></div>
+
+    <!-- DISSOLUTION -->
+    <div id="marriageBlock">
+      <div class="field-row">
+        <div class="field"><label>Date of Marriage <span class="req">*</span></label><input type="date" id="marriageDate" oninput="save('marriageDate',this.value)"><div class="field-error" id="marriageDateErr">Required</div></div>
+        <div class="field"><label>Separation Date</label><input type="date" id="separationDate" oninput="save('separationDate',this.value)"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>State of Marriage <span class="req">*</span></label><input type="text" id="marriageState" placeholder="Florida" oninput="save('marriageState',this.value)"><div class="field-error" id="marriageStateErr">Required</div></div>
+        <div class="field"><label>County of Marriage <span class="req">*</span></label><input type="text" id="marriageCounty" oninput="save('marriageCounty',this.value)"><div class="field-error" id="marriageCountyErr">Required</div></div>
+      </div>
+      <div class="field">
+        <label>County where you lived at separation <span class="req">*</span><span class="hint">This determines where the case is filed</span></label>
+        <input type="text" id="separationCounty" oninput="save('separationCounty',this.value)">
+        <div class="field-error" id="separationCountyErr">Required</div>
+      </div>
+      <div class="field">
+        <label>Prenuptial agreement? <span class="req">*</span></label>
+        <div class="radio-group inline">
+          <label class="radio-opt" onclick="toggleOpt(this,'prenup','Yes')"><input type="radio" name="prenup" value="Yes"> <span class="opt-label">Yes</span></label>
+          <label class="radio-opt" onclick="toggleOpt(this,'prenup','No')"><input type="radio" name="prenup" value="No"> <span class="opt-label">No</span></label>
+        </div>
+        <div class="field-error" id="prenupErr">Required</div>
+      </div>
+
+      <hr class="form-divider">
+      <div class="sub-section-title">Real Estate</div>
+      <div class="callout orange">You will receive a separate Equitable Distribution worksheet for all assets and debts. This section covers the marital home only.</div>
+      <div class="field">
+        <label>Did you and your spouse own a home together? <span class="req">*</span></label>
+        <div class="radio-group inline">
+          <label class="radio-opt" onclick="toggleOpt(this,'ownedHome','Yes');document.getElementById('realEstateBlock').style.display='block'"><input type="radio" name="ownedHome" value="Yes"> <span class="opt-label">Yes</span></label>
+          <label class="radio-opt" onclick="toggleOpt(this,'ownedHome','No');document.getElementById('realEstateBlock').style.display='none'"><input type="radio" name="ownedHome" value="No"> <span class="opt-label">No</span></label>
+        </div>
+        <div class="field-error" id="ownedHomeErr">Required</div>
+      </div>
+      <div id="realEstateBlock" style="display:none">
+        <div class="field"><label>Property Address <span class="req">*</span></label><input type="text" id="homeAddress" oninput="save('homeAddress',this.value)"></div>
+        <div class="field"><label>Who is on the Deed?</label><input type="text" id="homeDeed" placeholder="Both / Client only / Spouse only" oninput="save('homeDeed',this.value)"></div>
+        <div class="field-row">
+          <div class="field"><label>Date of Purchase</label><input type="date" id="homePurchaseDate" oninput="save('homePurchaseDate',this.value)"></div>
+          <div class="field"><label>Approx. Market Value</label><input type="text" id="homeValue" placeholder="$0" oninput="save('homeValue',this.value)"></div>
+        </div>
+        <div class="field"><label>Approx. Amount Owed (Mortgage)</label><input type="text" id="homeMortgage" placeholder="$0" oninput="save('homeMortgage',this.value)"></div>
+        <div class="field"><label>Who currently lives in the home? <span class="hint">List all children and adults</span></label><textarea id="homeLivingIn" oninput="save('homeLivingIn',this.value)"></textarea></div>
+      </div>
+    </div>
+
+    <!-- PATERNITY -->
+    <div id="paternityBlock" style="display:none">
+      <div class="callout">Paternity establishes legal parentage and gives the court authority to address custody, timesharing, and child support.</div>
+      <div class="field">
+        <label>Were you ever married to the other party?</label>
+        <div class="radio-group inline">
+          <label class="radio-opt" onclick="toggleOpt(this,'everMarried','Yes')"><input type="radio" name="everMarried" value="Yes"> <span class="opt-label">Yes</span></label>
+          <label class="radio-opt" onclick="toggleOpt(this,'everMarried','No')"><input type="radio" name="everMarried" value="No"> <span class="opt-label">No</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODIFICATION -->
+    <div id="modificationBlock" style="display:none">
+      <div class="field"><label>Existing Case Number <span class="req">*</span></label><input type="text" id="existingCaseNo" oninput="save('existingCaseNo',this.value)"><div class="field-error" id="existingCaseNoErr">Required</div></div>
+      <div class="field"><label>County where Order was entered <span class="req">*</span></label><input type="text" id="existingCounty" oninput="save('existingCounty',this.value)"><div class="field-error" id="existingCountyErr">Required</div></div>
+      <div class="field">
+        <label>What do you want to modify? <span class="req">*</span></label>
+        <div class="check-group">
+          <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="Child Support"> <div><span class="opt-label">Child Support</span></div></label>
+          <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="Parenting Plan / Timesharing"> <div><span class="opt-label">Parenting Plan / Timesharing</span></div></label>
+          <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="Alimony"> <div><span class="opt-label">Alimony</span></div></label>
+          <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="Other"> <div><span class="opt-label">Other</span></div></label>
+        </div>
+      </div>
+      <div class="field"><label>What has changed? <span class="req">*</span><span class="hint">Describe the substantial change in circumstances</span></label><textarea id="modChangeReason" oninput="save('modChangeReason',this.value)"></textarea><div class="field-error" id="modChangeReasonErr">Required</div></div>
+    </div>
+
+    <div class="nav-bar">
+      <button class="btn-back" onclick="goBack('caseinfo')">← Back</button>
+      <button class="btn-next" onclick="goNext('caseinfo')">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       STEP 5 — CHILDREN
+  ══════════════════════════════════════ -->
+  <div class="section" id="sec-children">
+    <div class="section-eyebrow">Step 6 of 7</div>
+    <div class="section-title">Children & <em>Timesharing</em></div>
+
+    <div class="field">
+      <label id="childrenQLabel">Minor children of this marriage? <span class="req">*</span><span class="hint">If yes, you will also receive UCCJEA and Children's Preferences forms</span></label>
+      <div class="radio-group inline">
+        <label class="radio-opt" onclick="toggleOpt(this,'hasChildren','Yes');document.getElementById('childrenDetails').style.display='block'"><input type="radio" name="hasChildren" value="Yes"> <span class="opt-label">Yes</span></label>
+        <label class="radio-opt" onclick="toggleOpt(this,'hasChildren','No');document.getElementById('childrenDetails').style.display='none'"><input type="radio" name="hasChildren" value="No"> <span class="opt-label">No</span></label>
+      </div>
+      <div class="field-error" id="hasChildrenErr">Required</div>
+    </div>
+
+    <div id="childrenDetails" style="display:none">
+      <div id="childRepeater"></div>
+      <button class="add-btn" onclick="addChild()">+ Add Child</button>
+
+      <hr class="form-divider">
+      <div class="field"><label>Children NOT of this case <span class="hint">List names and ages if any</span></label><textarea id="otherChildren" oninput="save('otherChildren',this.value)" placeholder="Ex: John Doe, age 9, my child  |  Jane Doe, age 4, spouse's child"></textarea></div>
+
+      <hr class="form-divider">
+      <div class="sub-section-title">Parental Responsibility</div>
+
+      <div class="field">
+        <label>What type of parental responsibility are you seeking? <span class="req">*</span></label>
+        <div class="radio-group">
+          <label class="radio-opt" onclick="toggleOpt(this,'parentalResp','Shared');document.getElementById('soleReasonBlock').style.display='none'"><input type="radio" name="parentalResp" value="Shared"> <div><span class="opt-label">Shared Parental Responsibility</span></div></label>
+          <label class="radio-opt" onclick="toggleOpt(this,'parentalResp','Shared-UDM');document.getElementById('soleReasonBlock').style.display='none'"><input type="radio" name="parentalResp" value="Shared-UDM"> <div><span class="opt-label">Shared with Ultimate Decision Making (one parent has final say)</span></div></label>
+          <label class="radio-opt" onclick="toggleOpt(this,'parentalResp','Sole');document.getElementById('soleReasonBlock').style.display='block'"><input type="radio" name="parentalResp" value="Sole"> <div><span class="opt-label">Sole Parental Responsibility</span></div></label>
+        </div>
+        <div class="field-error" id="parentalRespErr">Required</div>
+      </div>
+      <div id="soleReasonBlock" style="display:none" class="field">
+        <label>Why is shared parental responsibility NOT in the child(ren)'s best interest? <span class="req">*</span></label>
+        <textarea id="soleReason" oninput="save('soleReason',this.value)"></textarea>
+      </div>
+
+      <hr class="form-divider">
+      <div class="sub-section-title">Timesharing</div>
+
+      <div class="callout pink">Florida presumes equal (50/50) timesharing is in the child's best interest. Courts can deviate based on specific factors.</div>
+      <div class="field">
+        <label>How do you wish to proceed? <span class="req">*</span></label>
+        <div class="radio-group">
+          <label class="radio-opt" onclick="toggleOpt(this,'timesharing50','Agree');document.getElementById('deviationFactors').style.display='none'"><input type="radio" name="timesharing50" value="Agree"> <div><span class="opt-label">I agree with the 50/50 presumption</span></div></label>
+          <label class="radio-opt" onclick="toggleOpt(this,'timesharing50','Deviate');document.getElementById('deviationFactors').style.display='block'"><input type="radio" name="timesharing50" value="Deviate"> <div><span class="opt-label">I want to deviate from 50/50</span></div></label>
+        </div>
+        <div class="field-error" id="timesharing50Err">Required</div>
+      </div>
+
+      <div id="deviationFactors" style="display:none">
+        <div class="field">
+          <label>Select all factors that support a different arrangement:</label>
+          <div class="check-group">
+            <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="Health and Safety of the Child"> <div><span class="opt-label">Health and Safety of the Child</span></div></label>
+            <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="Child's Developmental Needs"> <div><span class="opt-label">Child's Developmental Needs</span></div></label>
+            <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="Child's Preference"> <div><span class="opt-label">Child's Preference (if of sufficient age and maturity)</span></div></label>
+            <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="Ability to Provide Stable Environment"> <div><span class="opt-label">Each Parent's Ability to Provide a Stable Environment</span></div></label>
+            <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="History of Domestic Violence or Abuse"> <div><span class="opt-label">History of Domestic Violence or Abuse</span></div></label>
+            <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="Parent's Mental and Physical Health"> <div><span class="opt-label">Parent's Mental and Physical Health</span></div></label>
+            <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="Willingness to Encourage Parent-Child Relationship"> <div><span class="opt-label">Parent's Willingness to Encourage a Close Parent-Child Relationship</span></div></label>
+            <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="Geographic Viability"> <div><span class="opt-label">Geographic Viability of the Parenting Plan</span></div></label>
+            <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="Employment Schedule and Availability"> <div><span class="opt-label">Each Parent's Employment Schedule and Availability</span></div></label>
+          </div>
+        </div>
+        <div class="field"><label>Notes for your attorney on timesharing <span class="req">*</span></label><textarea id="deviationNotes" oninput="save('deviationNotes',this.value)"></textarea></div>
+      </div>
+
+      <div class="field"><label>Current timesharing schedule <span class="hint">Describe what's in place now, if anything</span></label><textarea id="currentSchedule" oninput="save('currentSchedule',this.value)"></textarea></div>
+
+      <div class="field">
+        <label>Schedules you are open to: <span class="hint">Select all that apply</span></label>
+        <div class="check-group">
+          <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="Alternating Weeks"> <div><span class="opt-label">Alternating Weeks</span><div class="opt-sub">One week with each parent</div></div></label>
+          <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="2-2-3"> <div><span class="opt-label">2-2-3 Schedule</span><div class="opt-sub">2 days / 2 days / 3 days rotating</div></div></label>
+          <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="3-4-4-3"> <div><span class="opt-label">3-4-4-3 Schedule</span><div class="opt-sub">Balanced rotation with fewer exchanges</div></div></label>
+          <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="5-2 Weekday/Weekend Split"> <div><span class="opt-label">5-2 Schedule</span><div class="opt-sub">Weekdays with one parent, weekends with other</div></div></label>
+          <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="Other schedule"> <div><span class="opt-label">Other — I'll describe below</span></div></label>
+        </div>
+      </div>
+      <div class="field"><label>Proposed timesharing schedule <span class="hint">Describe in detail if needed</span></label><textarea id="proposedSchedule" oninput="save('proposedSchedule',this.value)"></textarea></div>
+
+      <hr class="form-divider">
+      <div class="sub-section-title">Child Support</div>
+      <div class="field">
+        <label>Is child support at issue? <span class="req">*</span></label>
+        <div class="radio-group inline">
+          <label class="radio-opt" onclick="toggleOpt(this,'csAtIssue','Yes');document.getElementById('csBlock').style.display='block'"><input type="radio" name="csAtIssue" value="Yes"> <span class="opt-label">Yes</span></label>
+          <label class="radio-opt" onclick="toggleOpt(this,'csAtIssue','No');document.getElementById('csBlock').style.display='none'"><input type="radio" name="csAtIssue" value="No"> <span class="opt-label">No</span></label>
+        </div>
+        <div class="field-error" id="csAtIssueErr">Required</div>
+      </div>
+      <div id="csBlock" style="display:none">
+        <div class="field">
+          <label>Government assistance received? <span class="hint">Check all that apply</span></label>
+          <div class="check-group">
+            <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="I receive assistance"> <div><span class="opt-label">I receive cash assistance / Medicaid / housing assistance</span></div></label>
+            <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="Other party receives assistance"> <div><span class="opt-label">The other party receives cash assistance / Medicaid / housing assistance</span></div></label>
+            <label class="check-opt" onclick="toggleCheck(this)"><input type="checkbox" value="Neither party receives assistance"> <div><span class="opt-label">Neither party receives assistance</span></div></label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Has child support previously been ordered? <span class="req">*</span></label>
+          <div class="radio-group inline">
+            <label class="radio-opt" onclick="toggleOpt(this,'csPrevOrdered','Yes');document.getElementById('csPriorOrderBlock').style.display='block'"><input type="radio" name="csPrevOrdered" value="Yes"> <span class="opt-label">Yes</span></label>
+            <label class="radio-opt" onclick="toggleOpt(this,'csPrevOrdered','No');document.getElementById('csPriorOrderBlock').style.display='none'"><input type="radio" name="csPrevOrdered" value="No"> <span class="opt-label">No</span></label>
+          </div>
+        </div>
+        <div id="csPriorOrderBlock" style="display:none">
+          <div class="field-row">
+            <div class="field"><label>Child Support Case #</label><input type="text" id="csCaseNo" oninput="save('csCaseNo',this.value)"></div>
+            <div class="field"><label>Date of Order</label><input type="date" id="csOrderDate" oninput="save('csOrderDate',this.value)"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Amount Ordered</label><input type="text" id="csAmount" placeholder="$0/month" oninput="save('csAmount',this.value)"></div>
+            <div class="field">
+              <label>Type of Order</label>
+              <select id="csOrderType" onchange="save('csOrderType',this.value)">
+                <option value="">Select...</option><option>Temporary</option><option>Final</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Dept. of Revenue involved?</label>
+            <div class="radio-group inline">
+              <label class="radio-opt" onclick="toggleOpt(this,'csDOR','Yes')"><input type="radio" name="csDOR" value="Yes"> <span class="opt-label">Yes</span></label>
+              <label class="radio-opt" onclick="toggleOpt(this,'csDOR','No')"><input type="radio" name="csDOR" value="No"> <span class="opt-label">No</span></label>
+              <label class="radio-opt" onclick="toggleOpt(this,'csDOR','Unsure')"><input type="radio" name="csDOR" value="Unsure"> <span class="opt-label">I don't know</span></label>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Concerns about the other party's income?</label>
+          <div class="radio-group inline">
+            <label class="radio-opt" onclick="toggleOpt(this,'incConcerns','Yes');document.getElementById('incConcernsText').style.display='block'"><input type="radio" name="incConcerns" value="Yes"> <span class="opt-label">Yes</span></label>
+            <label class="radio-opt" onclick="toggleOpt(this,'incConcerns','No');document.getElementById('incConcernsText').style.display='none'"><input type="radio" name="incConcerns" value="No"> <span class="opt-label">No</span></label>
+          </div>
+        </div>
+        <div id="incConcernsText" style="display:none" class="field"><label>Describe your concerns:</label><textarea id="incConcernsDetail" oninput="save('incConcernsDetail',this.value)"></textarea></div>
+        <div class="field"><label>Notes for attorney on child support:</label><textarea id="csNotes" oninput="save('csNotes',this.value)"></textarea></div>
+      </div>
+    </div>
+
+    <div id="attyFeesBlock" style="display:none">
+      <hr class="form-divider">
+      <div class="field">
+        <label>Seeking attorney's fees from the other party? <span class="req">*</span><span class="hint">Court looks at financial need and other party's ability to pay</span></label>
+        <div class="radio-group inline">
+          <label class="radio-opt" onclick="toggleOpt(this,'seekFees','Yes')"><input type="radio" name="seekFees" value="Yes"> <span class="opt-label">Yes</span></label>
+          <label class="radio-opt" onclick="toggleOpt(this,'seekFees','No')"><input type="radio" name="seekFees" value="No"> <span class="opt-label">No</span></label>
+        </div>
+        <div class="field-error" id="seekFeesErr">Required</div>
+      </div>
+    </div>
+
+    <div class="nav-bar">
+      <button class="btn-back" onclick="goBack('children')">← Back</button>
+      <button class="btn-next" onclick="goNext('children')">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       STEP 6 — GOALS
+  ══════════════════════════════════════ -->
+  <div class="section" id="sec-goals">
+    <div class="section-eyebrow">Step 7 of 7</div>
+    <div class="section-title">Goals & <em>Preferences</em></div>
+    <div class="section-desc">No filter. Tell us what you actually want and what you're worried about. This goes directly to your attorney.</div>
+
+    <div id="divorceSentiment" style="display:none">
+      <div class="field">
+        <label>Regarding the divorce: <span class="req">*</span></label>
+        <div class="radio-group">
+          <label class="radio-opt" onclick="toggleOpt(this,'divorceSent','Amicable')"><input type="radio" name="divorceSent" value="Amicable"> <div><span class="opt-label">Both of us want to dissolve the marriage amicably and peacefully</span></div></label>
+          <label class="radio-opt" onclick="toggleOpt(this,'divorceSent','Concerned')"><input type="radio" name="divorceSent" value="Concerned"> <div><span class="opt-label">I'm concerned it will not be amicable or peaceful</span></div></label>
+          <label class="radio-opt" onclick="toggleOpt(this,'divorceSent','IWantTheyDont')"><input type="radio" name="divorceSent" value="IWantTheyDont"> <div><span class="opt-label">I want the divorce — my spouse does not</span></div></label>
+          <label class="radio-opt" onclick="toggleOpt(this,'divorceSent','TheyWantIDont')"><input type="radio" name="divorceSent" value="TheyWantIDont"> <div><span class="opt-label">My spouse wants the divorce — I do not</span></div></label>
+        </div>
+        <div class="field-error" id="divorceSentErr">Required</div>
+      </div>
+
+      <hr class="form-divider">
+      <div class="sub-section-title">Alimony</div>
+      <div class="field">
+        <label>Is alimony at issue?</label>
+        <div class="radio-group inline">
+          <label class="radio-opt" onclick="toggleOpt(this,'alimonyAtIssue','Yes');document.getElementById('alimonyBlock').style.display='block'"><input type="radio" name="alimonyAtIssue" value="Yes"> <span class="opt-label">Yes</span></label>
+          <label class="radio-opt" onclick="toggleOpt(this,'alimonyAtIssue','No');document.getElementById('alimonyBlock').style.display='none'"><input type="radio" name="alimonyAtIssue" value="No"> <span class="opt-label">No</span></label>
+          <label class="radio-opt" onclick="toggleOpt(this,'alimonyAtIssue','Unsure');document.getElementById('alimonyBlock').style.display='none'"><input type="radio" name="alimonyAtIssue" value="Unsure"> <span class="opt-label">I'm not sure</span></label>
+        </div>
+      </div>
+      <div id="alimonyBlock" style="display:none">
+        <div class="field">
+          <label>Alimony position: <span class="req">*</span></label>
+          <div class="radio-group">
+            <label class="radio-opt" onclick="toggleOpt(this,'alimonyPos','Seeking')"><input type="radio" name="alimonyPos" value="Seeking"> <div><span class="opt-label">I am seeking alimony</span></div></label>
+            <label class="radio-opt" onclick="toggleOpt(this,'alimonyPos','Opposing')"><input type="radio" name="alimonyPos" value="Opposing"> <div><span class="opt-label">The other party is seeking alimony from me</span></div></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Anything else we need to know? <span class="req">*</span><span class="hint">Safety concerns, urgent issues, anything that should be on our radar before your intake call</span></label>
+      <textarea id="generalNotes" oninput="save('generalNotes',this.value)" style="min-height:120px"></textarea>
+      <div class="field-error" id="generalNotesErr">Required</div>
+    </div>
+
+    <div class="field">
+      <label>How did you hear about us?</label>
+      <select id="referralSource" onchange="save('referralSource',this.value)">
+        <option value="">Select...</option>
+        <option>Google Search</option><option>Referral – Friend or Family</option>
+        <option>Attorney Referral</option><option>Social Media</option>
+        <option>Returning Client</option><option>Other</option>
+      </select>
+    </div>
+
+    <div class="nav-bar">
+      <button class="btn-back" onclick="goBack('goals')">← Back</button>
+      <button class="btn-submit" onclick="submitForm()">Submit Intake →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SUMMARY
+  ══════════════════════════════════════ -->
+  <div class="section" id="sec-summary">
+    <div class="section-eyebrow">Complete</div>
+    <div class="section-title">Intake <em>Summary</em></div>
+    <div class="section-desc">Your responses have been recorded. Review below, then copy or print for your file.</div>
+
+    <div id="summaryContent"></div>
+
+    <div class="action-row">
+      <button class="copy-btn" onclick="copySummary()">📋 Copy Summary</button>
+      <button class="copy-btn black" onclick="window.print()">🖨 Print</button>
+    </div>
+
+    <div class="complete-wrap">
+      <div class="complete-icon">✅</div>
+      <div class="complete-title">You're all set.</div>
+      <div class="complete-desc">A member of the Family Matters Law Group team will be in touch to schedule your intake call. Please have any relevant documents ready — financial records, prior orders, and correspondence from the other party.</div>
+      <div class="firm-promises">
+        <span class="promise-badge p">Clarity</span>
+        <span class="promise-badge o">Options</span>
+        <span class="promise-badge t">Control</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- COLOR BAR FOOTER -->
+<div class="color-bar">
+  <span class="cb-pink"></span><span class="cb-orange"></span><span class="cb-lime"></span><span class="cb-teal"></span>
+</div>
+<div class="site-footer">
+  Family Matters Law Group, P.A. &nbsp;•&nbsp; Confidential &nbsp;•&nbsp; <a href="https://familymatterslawgroup.com">familymatterslawgroup.com</a> &nbsp;•&nbsp; FL Bar No. 64399
+</div>
+
+<script>
+// ── STATE ──
+let data = {};
+let caseType = '';
+let childCount = 0;
+
+function save(key, val) { data[key] = val; }
+
+// ── CARD SELECT ──
+function selectCard(el, key) {
+  document.querySelectorAll('#caseTypeCards .case-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  data[key] = el.dataset.val;
+  caseType = el.dataset.val;
+  document.getElementById('caseTypeErr').style.display = 'none';
+}
+
+// ── RADIO ──
+function toggleOpt(el, key, val) {
+  const group = el.closest('.radio-group');
+  if (group) group.querySelectorAll('.radio-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  el.querySelector('input').checked = true;
+  data[key] = val;
+}
+
+// ── CHECKBOX ──
+function toggleCheck(el) {
+  el.classList.toggle('selected');
+  el.querySelector('input').checked = el.classList.contains('selected');
+}
+
+// ── CHILDREN REPEATER ──
+function addChild() {
+  childCount++;
+  const id = 'child_' + childCount;
+  if (!data.children) data.children = [];
+  const div = document.createElement('div');
+  div.className = 'repeater-item';
+  div.id = id;
+  div.innerHTML = `
+    <button class="remove-btn" onclick="removeChild('${id}')">✕ Remove</button>
+    <div style="font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin-bottom:14px">Child ${childCount}</div>
+    <div class="field-row">
+      <div class="field"><label>First Name <span class="req">*</span></label><input type="text" id="${id}_first" placeholder="First" oninput="saveChild(${childCount},'first',this.value)"></div>
+      <div class="field"><label>Last Name</label><input type="text" id="${id}_last" oninput="saveChild(${childCount},'last',this.value)"></div>
+    </div>
+    <div class="field"><label>Date of Birth <span class="req">*</span></label><input type="date" id="${id}_dob" oninput="saveChild(${childCount},'dob',this.value)"></div>`;
+  document.getElementById('childRepeater').appendChild(div);
+}
+function removeChild(id) { document.getElementById(id)?.remove(); }
+function saveChild(idx, field, val) {
+  if (!data.children) data.children = [];
+  let c = data.children.find(x => x.idx === idx);
+  if (!c) { c = { idx }; data.children.push(c); }
+  c[field] = val;
+}
+
+// ── CONFIGURE SECTIONS BY CASE TYPE ──
+function configureSections() {
+  const isDom = caseType.startsWith('dissolution');
+  const isPat = caseType.startsWith('paternity');
+  const isMod = caseType === 'modification';
+  const isPet = caseType.includes('petitioner') || isMod;
+
+  document.getElementById('otherPartyTitle').innerHTML = isPat ? 'Other <em>Parent</em>' : 'Spouse / <em>Other Party</em>';
+  document.getElementById('otherAttyTitle').textContent = isPat ? "Other Parent's Attorney" : "Spouse's Attorney";
+  document.getElementById('otherEmpTitle').textContent  = isPat ? "Other Parent's Employment" : "Spouse's Employment";
+  document.getElementById('caseInfoTitle').innerHTML    = isMod ? 'Existing <em>Order Details</em>' : isPat ? 'Case <em>Background</em>' : 'Marriage <em>Information</em>';
+
+  document.getElementById('nameRestorationBlock').style.display = isDom ? 'block' : 'none';
+  document.getElementById('flResidencyBlock').style.display     = (isDom && isPet) ? 'block' : 'none';
+  document.getElementById('marriageBlock').style.display        = isDom ? 'block' : 'none';
+  document.getElementById('paternityBlock').style.display       = isPat ? 'block' : 'none';
+  document.getElementById('modificationBlock').style.display    = isMod ? 'block' : 'none';
+  document.getElementById('attyFeesBlock').style.display        = (isPat || isMod) ? 'block' : 'none';
+  document.getElementById('divorceSentiment').style.display     = isDom ? 'block' : 'none';
+
+  const cqLabel = document.getElementById('childrenQLabel');
+  cqLabel.innerHTML = isPat
+    ? 'Minor children involved in this case? <span class="req">*</span>'
+    : 'Minor children of this marriage? <span class="req">*</span><span class="hint">If yes, you will also receive UCCJEA and Children\'s Preferences forms</span>';
+}
+
+// ── SECTIONS ──
+const ORDER = ['casetype','yourinfo','youremployment','otherparty','caseinfo','children','goals','summary'];
+
+function showSection(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-' + name).classList.add('active');
+  updateProgress(name);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateProgress(name) {
+  const idx = ORDER.indexOf(name);
+  const pct = Math.round((idx / (ORDER.length - 1)) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent  = pct + '%';
+  const labels = { casetype:'Case Type', yourinfo:'Your Information', youremployment:'Employment & Income', otherparty:'Other Party', caseinfo:'Case Details', children:'Children', goals:'Goals & Preferences', summary:'Complete' };
+  document.getElementById('progressStep').textContent = labels[name] || name;
+}
+
+// ── VALIDATION ──
+function validateSection(name) {
+  let ok = true;
+  function req(id, errId) {
+    const el = document.getElementById(id);
+    const er = document.getElementById(errId);
+    if (!el) return;
+    if (!el.value?.trim()) { el.classList.add('error'); if (er) er.classList.add('show'); ok = false; }
+    else { el.classList.remove('error'); if (er) er.classList.remove('show'); }
+  }
+  function reqR(rname, errId) {
+    const er = document.getElementById(errId);
+    if (!document.querySelector(`input[name="${rname}"]:checked`)) { if (er) er.classList.add('show'); ok = false; }
+    else { if (er) er.classList.remove('show'); }
+  }
+  if (name === 'casetype') { if (!caseType) { document.getElementById('caseTypeErr').style.display='block'; ok=false; } }
+  if (name === 'yourinfo') { req('clientFirst','clientFirstErr'); req('clientLast','clientLastErr'); req('clientDOB','clientDOBErr'); req('clientAddress','clientAddressErr'); req('clientPhone','clientPhoneErr'); req('clientEmail','clientEmailErr'); reqR('clientMilitary','clientMilitaryErr'); }
+  if (name === 'youremployment') { reqR('clientEmployed','clientEmployedErr'); }
+  if (name === 'otherparty') { req('otherFirst','otherFirstErr'); req('otherLast','otherLastErr'); reqR('otherHasAtty','otherHasAttyErr'); }
+  if (name === 'caseinfo') {
+    if (caseType.startsWith('dissolution')) { req('marriageDate','marriageDateErr'); req('marriageState','marriageStateErr'); req('marriageCounty','marriageCountyErr'); req('separationCounty','separationCountyErr'); reqR('prenup','prenupErr'); reqR('ownedHome','ownedHomeErr'); }
+    if (caseType === 'modification') { req('existingCaseNo','existingCaseNoErr'); req('existingCounty','existingCountyErr'); req('modChangeReason','modChangeReasonErr'); }
+  }
+  if (name === 'children') {
+    reqR('hasChildren','hasChildrenErr');
+    if (data.hasChildren === 'Yes') { reqR('parentalResp','parentalRespErr'); reqR('timesharing50','timesharing50Err'); reqR('csAtIssue','csAtIssueErr'); }
+    if (caseType.startsWith('paternity') || caseType === 'modification') { reqR('seekFees','seekFeesErr'); }
+  }
+  if (name === 'goals') {
+    req('generalNotes','generalNotesErr');
+    if (caseType.startsWith('dissolution')) { reqR('divorceSent','divorceSentErr'); }
+  }
+  return ok;
+}
+
+function goNext(cur) {
+  if (!validateSection(cur)) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+  if (cur === 'casetype') { configureSections(); showSection('yourinfo'); return; }
+  const next = ORDER[ORDER.indexOf(cur) + 1];
+  if (next) showSection(next);
+}
+function goBack(cur) {
+  const prev = ORDER[ORDER.indexOf(cur) - 1];
+  if (prev) showSection(prev);
+}
+
+// ── SUBMIT ──
+function submitForm() {
+  if (!validateSection('goals')) return;
+  buildSummary();
+  showSection('summary');
+}
+
+// ── SUMMARY ──
+function buildSummary() {
+  const wrap = document.getElementById('summaryContent');
+  const rows = (pairs) => pairs.filter(([,v]) => v).map(([k,v]) =>
+    `<div class="summary-row"><span class="sk">${k}</span><span class="sv">${v}</span></div>`).join('');
+
+  const caseLabels = {
+    'dissolution-petitioner':'Dissolution of Marriage – Petitioner',
+    'dissolution-respondent':'Dissolution of Marriage – Respondent',
+    'paternity-petitioner':'Paternity – Petitioner',
+    'paternity-respondent':'Paternity – Respondent',
+    'modification':'Modification',
+    'other':'Other Matter'
+  };
+
+  const section = (title, content) => `
+    <div class="summary-section">
+      <div class="summary-section-title">${title}</div>
+      ${content}
+    </div>`;
+
+  const checkedVals = (groupSel) => {
+    const vals = [];
+    document.querySelectorAll(`${groupSel} .check-opt.selected input`).forEach(i => vals.push(i.value));
+    return vals.join(', ') || '—';
+  };
+
+  let html = '';
+  html += section('Case Information', rows([
+    ['Case Type', caseLabels[caseType] || caseType],
+    ['Date Submitted', new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})]
+  ]));
+
+  html += section('Client – Personal', rows([
+    ['Full Name', [data.clientFirst,data.clientMiddle,data.clientLast,data.clientSuffix].filter(Boolean).join(' ')],
+    ['Date of Birth', data.clientDOB],
+    ['Gender', data.clientGender],
+    ['Phone', data.clientPhone],
+    ['Email', data.clientEmail],
+    ['Address', data.clientAddress],
+    ['Name Restoration', data.clientNameRestore],
+    ['Former / Maiden Name', data.clientMaidenName],
+    ['Military Status', data.clientMilitary]
+  ]));
+
+  html += section('Client – Employment', rows([
+    ['Employed', data.clientEmployed],
+    ['Employer', data.clientEmployer],
+    ['Job Title', data.clientJobTitle],
+    ['Status', data.clientEmpStatus],
+    ['Gross Annual Income', data.clientIncome],
+    ['Pay Frequency', data.clientPayFreq]
+  ]));
+
+  const oLabel = caseType.startsWith('paternity') ? 'Other Parent' : 'Spouse';
+  html += section(`${oLabel} – Personal`, rows([
+    ['Full Name', [data.otherFirst,data.otherMiddle,data.otherLast,data.otherSuffix].filter(Boolean).join(' ')],
+    ['Date of Birth', data.otherDOB],
+    ['Gender', data.otherGender],
+    ['Phone', data.otherPhone],
+    ['Email', data.otherEmail],
+    ['Address', data.otherAddress],
+    ['Florida Resident', data.otherFLResident],
+    ['Has Attorney', data.otherHasAtty],
+    ['Attorney Firm', data.otherAttyFirm]
+  ]));
+
+  html += section(`${oLabel} – Employment`, rows([
+    ['Employed', data.otherEmployed],
+    ['Employer', data.otherEmployer],
+    ['Job Title', data.otherJobTitle],
+    ['Status', data.otherEmpStatus],
+    ['Approx. Income', data.otherIncome],
+    ['Pay Frequency', data.otherPayFreq]
+  ]));
+
+  if (caseType.startsWith('dissolution')) {
+    html += section('Marriage & Property', rows([
+      ['Date of Marriage', data.marriageDate],
+      ['State', data.marriageState],
+      ['County', data.marriageCounty],
+      ['Separation Date', data.separationDate],
+      ['Separation County', data.separationCounty],
+      ['Prenuptial Agreement', data.prenup],
+      ['Owned Marital Home', data.ownedHome],
+      ['Home Address', data.homeAddress],
+      ['Deed Holders', data.homeDeed],
+      ['Market Value', data.homeValue],
+      ['Mortgage Owed', data.homeMortgage],
+      ['Currently Living There', data.homeLivingIn]
+    ]));
+  }
+
+  if (caseType === 'modification') {
+    html += section('Existing Order', rows([
+      ['Case Number', data.existingCaseNo],
+      ['County', data.existingCounty],
+      ['Reason for Modification', data.modChangeReason]
+    ]));
+  }
+
+  let childRows = [['Minor Children', data.hasChildren]];
+  if (data.children && data.children.length > 0) {
+    data.children.forEach((c,i) => childRows.push([`Child ${i+1}`, `${c.first||''} ${c.last||''} — DOB: ${c.dob||'—'}`]));
+  }
+  childRows = childRows.concat([
+    ['Other Children', data.otherChildren],
+    ['Parental Responsibility', data.parentalResp],
+    ['Sole Reason', data.soleReason],
+    ['Timesharing (50/50)', data.timesharing50],
+    ['Current Schedule', data.currentSchedule],
+    ['Proposed Schedule', data.proposedSchedule],
+    ['Child Support', data.csAtIssue],
+    ['CS Prior Order', data.csPrevOrdered],
+    ['CS Amount', data.csAmount],
+    ['CS Type', data.csOrderType],
+    ['DOR Involved', data.csDOR],
+    ['Income Concerns', data.incConcerns],
+    ['Income Concern Details', data.incConcernsDetail],
+    ['CS Notes', data.csNotes],
+    ['Attorney Fees', data.seekFees]
+  ]);
+  html += section('Children & Timesharing', rows(childRows));
+
+  html += section('Goals & Preferences', rows([
+    ['Divorce Sentiment', data.divorceSent],
+    ['Alimony at Issue', data.alimonyAtIssue],
+    ['Alimony Position', data.alimonyPos],
+    ['Referral Source', data.referralSource],
+    ['General Notes', data.generalNotes]
+  ]));
+
+  wrap.innerHTML = html;
+}
+
+function copySummary() {
+  const rows = document.querySelectorAll('.summary-row');
+  let txt = 'FAMILY MATTERS LAW GROUP, P.A.\nCLIENT INTAKE SUMMARY\n' + '='.repeat(50) + '\n\n';
+  let lastTitle = '';
+  document.querySelectorAll('.summary-section').forEach(sec => {
+    const title = sec.querySelector('.summary-section-title')?.textContent;
+    if (title) { txt += '\n' + title.toUpperCase() + '\n' + '-'.repeat(30) + '\n'; }
+    sec.querySelectorAll('.summary-row').forEach(r => {
+      const k = r.querySelector('.sk')?.textContent;
+      const v = r.querySelector('.sv')?.textContent;
+      if (v && v !== '—') txt += `${k}: ${v}\n`;
+    });
+  });
+  navigator.clipboard.writeText(txt).then(() => alert('Summary copied to clipboard.'));
+}
+</script>
+</body>
+</html>
