@@ -1271,9 +1271,256 @@ function goBack(cur){
   if(prev)showSection(prev);
 }
 
+// ── CASE ABBREVIATION ──
+function getCaseAbbr(){
+  if(caseType.startsWith('dissolution'))return'DOM';
+  if(caseType.startsWith('paternity'))return'PAT';
+  if(caseType.startsWith('modification'))return'MOD';
+  if(caseType.startsWith('custody'))return'CS';
+  return'OTHER';
+}
+
+// ── PLAIN TEXT SUMMARY (for Zapier) ──
+function buildTextSummary(){
+  const caseLabels={'dissolution-petitioner':'Dissolution of Marriage – Petitioner','dissolution-respondent':'Dissolution of Marriage – Respondent','paternity-petitioner':'Paternity – Petitioner','paternity-respondent':'Paternity – Respondent','modification-petitioner':'Modification – Petitioner','modification-respondent':'Modification – Respondent','custody-petitioner':'Custody/Support – Petitioner','custody-respondent':'Custody/Support – Respondent','other':'Other Matter'};
+  const line=(k,v)=>v?`${k}: ${v}\n`:'';
+  const head=(t)=>`\n${'='.repeat(50)}\n${t.toUpperCase()}\n${'='.repeat(50)}\n`;
+  let t='';
+  t+='FAMILY MATTERS LAW GROUP, P.A.\n';
+  t+='CLIENT INTAKE SUMMARY\n';
+  t+=`Submitted: ${new Date().toLocaleString('en-US')}\n`;
+  t+=head('Case Information');
+  t+=line('Case Type',caseLabels[caseType]||caseType);
+  t+=line('Case Abbreviation',getCaseAbbr());
+  t+=head('Service & Deadlines');
+  t+=line('Been Served',data.hasBeenServed);
+  t+=line('Date Served',data.serviceDate);
+  t+=line('Service Method',data.serviceMethod);
+  t+=line('Answer Deadline',data.answerDeadline);
+  t+=line('Days Until Deadline',data.daysUntilDeadline!==undefined?data.daysUntilDeadline+' days':'');
+  t+=line('Hearing Date',data.hearingDate);
+  t+=head('Client – Personal');
+  t+=line('Full Name',[data.clientFirst,data.clientMiddle,data.clientLast,data.clientSuffix].filter(Boolean).join(' '));
+  t+=line('Date of Birth',data.clientDOB);
+  t+=line('Gender',data.clientGender);
+  t+=line('Phone',data.clientPhone);
+  t+=line('Email',data.clientEmail);
+  t+=line('Address',data.clientAddress);
+  t+=line('Name Restoration',data.clientNameRestore);
+  t+=line('Former/Maiden Name',data.clientMaidenName);
+  t+=line('Military Status',data.clientMilitary);
+  t+=head('Client – Employment');
+  t+=line('Employed',data.clientEmployed);
+  t+=line('Employer',data.clientEmployer);
+  t+=line('Job Title',data.clientJobTitle);
+  t+=line('Employment Status',data.clientEmpStatus);
+  t+=line('Gross Annual Income',data.clientIncome);
+  t+=line('Pay Frequency',data.clientPayFreq);
+  const oLabel=caseType.startsWith('paternity')||caseType.startsWith('custody')?'Other Parent':'Spouse';
+  t+=head(`${oLabel} – Personal`);
+  t+=line('Full Name',[data.otherFirst,data.otherMiddle,data.otherLast,data.otherSuffix].filter(Boolean).join(' '));
+  t+=line('Date of Birth',data.otherDOB);
+  t+=line('Gender',data.otherGender);
+  t+=line('Phone',data.otherPhone);
+  t+=line('Email',data.otherEmail);
+  t+=line('Address',data.otherAddress);
+  t+=line('FL Resident',data.otherFLResident);
+  t+=line('Name Restoration',data.otherNameRestore);
+  t+=line('Has Attorney',data.otherHasAtty);
+  t+=line('Attorney Firm',data.otherAttyFirm);
+  t+=line('Attorney Phone',data.otherAttyPhone);
+  t+=line('Attorney Address',data.otherAttyAddress);
+  t+=line('Attorney Email',data.otherAttyEmail);
+  t+=head(`${oLabel} – Employment`);
+  t+=line('Employed',data.otherEmployed);
+  t+=line('Employer',data.otherEmployer);
+  t+=line('Job Title',data.otherJobTitle);
+  t+=line('Employment Status',data.otherEmpStatus);
+  t+=line('Approx. Income',data.otherIncome);
+  t+=line('Pay Frequency',data.otherPayFreq);
+  if(caseType.startsWith('dissolution')){
+    t+=head('Marriage & Property');
+    t+=line('Date of Marriage',data.marriageDate);
+    t+=line('City of Marriage',data.marriageCity);
+    t+=line('State of Marriage',data.marriageState);
+    t+=line('County of Marriage',data.marriageCounty);
+    t+=line('Separation Date',data.separationDate);
+    t+=line('Separation County',data.separationCounty);
+    t+=line('Reason for Divorce',data.divorceReason);
+    t+=line('Prenuptial Agreement',data.prenup);
+    t+=line('Owned Home Together',data.ownedHome);
+    t+=line('Home Address',data.homeAddress);
+    t+=line('Deed Holders',data.homeDeed);
+    t+=line('Market Value',data.homeValue);
+    t+=line('Mortgage Balance',data.homeMortgage);
+    t+=line('Currently Living There',data.homeLivingIn);
+    t+=line('Home Goal',data.homeGoal);
+    t+=line('Retain Personal Property',data.retainProperty);
+    t+=line('Property List',data.personalPropertyList);
+    t+=line('Property Value',data.personalPropertyValue);
+    t+=line('Other Real Estate',data.otherRealEstate);
+  }
+  if(caseType.startsWith('modification')){
+    t+=head('Existing Order / Modification');
+    t+=line('Case Number',data.existingCaseNo);
+    t+=line('County',data.existingCounty);
+    t+=line('Divorce Decree Date',data.divorceDecreeDate);
+    t+=line('Modification Reason',data.modChangeReason);
+    t+=line('Child/Custody Changes',data.modChildExplain);
+    t+=line('Spousal Support Changes',data.modSpousalExplain);
+    t+=line('Property Changes',data.modPropertyExplain);
+  }
+  t+=head('Children & Timesharing');
+  t+=line('Minor Children',data.hasChildren);
+  if(data.children&&data.children.length>0){
+    data.children.forEach((c,i)=>{
+      t+=`\nChild ${i+1}:\n`;
+      t+=line('  Name',[c.first,c.last].filter(Boolean).join(' '));
+      t+=line('  Date of Birth',c.dob);
+      t+=line('  Gender',c.gender);
+      t+=line('  Address with Client',c.addressWithMe);
+      t+=line('  Address with Other Parent',c.addressWithOther);
+    });
+  }
+  t+=line('Other Children',data.otherChildren);
+  t+=line('Current Custody Order',data.hasCustodyOrder);
+  t+=line('Custody Order Date',data.custodyAgreementDate);
+  t+=line('Custody Description',data.custodyDesc);
+  t+=line('Parental Responsibility',data.parentalResp);
+  t+=line('Sole Reason',data.soleReason);
+  t+=line('Timesharing Position',data.timesharing50);
+  t+=line('Current Schedule',data.currentSchedule);
+  t+=line('Proposed Schedule',data.proposedSchedule);
+  t+=line('CS Currently Paid',data.csPaidNow);
+  t+=line('CS Who Pays',data.csWhoPays);
+  t+=line('CS Current Amount',data.csCurrentAmount);
+  t+=line('CS Payments Behind',data.csBehind);
+  t+=line('CS At Issue',data.csAtIssue);
+  t+=line('CS Prior Order',data.csPrevOrdered);
+  t+=line('CS Amount Ordered',data.csAmount);
+  t+=line('CS Order Type',data.csOrderType);
+  t+=line('DOR Involved',data.csDOR);
+  t+=line('Income Concerns',data.incConcerns);
+  t+=line('Income Concern Details',data.incConcernsDetail);
+  t+=line('CS Notes',data.csNotes);
+  t+=line('Attorney Fees Sought',data.seekFees);
+  if(data.hasChildren==='Yes'){
+    t+=head('UCCJEA');
+    t+=line('Acknowledgment',data.uccjeaAck);
+    t+=line('Participated in Proceedings',data.uccjeaParticipated);
+    t+=line('Proceeding Child Name',data.uccjeaProcChildName);
+    t+=line('Proceeding Type',data.uccjeaProcType);
+    t+=line('Proceeding Court/State',data.uccjeaProcCourt);
+    t+=line('Proceeding Date',data.uccjeaProcDate);
+    t+=line('Pending Proceedings',data.uccjeaPending);
+    t+=line('Pending Child Name',data.uccjeaPendChildName);
+    t+=line('Pending Type',data.uccjeaPendType);
+    t+=line('Pending Court/State',data.uccjeaPendCourt);
+    t+=line('Prior Case Type',data.uccjeaPriorCase);
+    t+=line('Prior Case County/State',data.uccjeaPriorCaseCounty);
+    t+=line('Third Party Custody',data.uccjeaThirdParty);
+    t+=line('Third Party Name/Address',data.uccjeaThirdPartyName);
+    t+=line('CS Order Status',data.uccjeaCSOrder);
+    t+=line('CS Child Name',data.uccjeaCSChildName);
+    t+=line('CS Type',data.uccjeaCSType);
+    t+=line('CS Case #',data.uccjeaCSCaseNo);
+    t+=line('CS Order Date',data.uccjeaCSOrderDate);
+    t+=line('CS Amount',data.uccjeaCSAmount);
+    t+=line('CS Payer',data.uccjeaCSPayer);
+    if(data.uccjeaChildren&&data.uccjeaChildren.length>0){
+      data.uccjeaChildren.forEach((c,i)=>{
+        t+=`\nUCCJEA Child ${i+1}: ${[c.firstName,c.lastName].filter(Boolean).join(' ')}\n`;
+        t+=line('  Current Address (client)',c.currentAddressMe);
+        t+=line('  Current Address (other)',c.currentAddressOther);
+        t+=line('  Prior Address',c.priorAddress);
+        t+=line('  Prior Dates',[(c.priorStart||''),(c.priorEnd||'')].filter(Boolean).join(' to '));
+        t+=line('  Prior Adults',c.priorAdults);
+      });
+    }
+  }
+  t+=head('Goals & Preferences');
+  t+=line('Divorce Sentiment',data.divorceSent);
+  t+=line('Spousal Support Position',data.alimonyPos);
+  t+=line('Alimony Notes',data.alimonyNotes);
+  t+=line('Custody Goal',data.custodyGoal);
+  t+=line('Custody Notes',data.custodyGoalNotes);
+  t+=line('Child Support Goal',data.csGoal);
+  t+=line('CS Goal Notes',data.csGoalNotes);
+  t+=line('Referral Source',data.referralSource);
+  t+=line('General Notes',data.generalNotes);
+  t+='\n'+('='.repeat(50))+'\n';
+  t+='END OF INTAKE — Family Matters Law Group, P.A.\n';
+  t+='familymatterslawgroup.com — FL Bar No. 64399\n';
+  return t;
+}
+
 // ── SUBMIT ──
-function submitForm(){
+async function submitForm(){
   if(!validateSection('goals'))return;
+
+  // Show submitting state
+  const btn=document.querySelector('.btn-submit');
+  const orig=btn.textContent;
+  btn.textContent='Submitting...';
+  btn.disabled=true;
+
+  const textSummary=buildTextSummary();
+  const caseAbbr=getCaseAbbr();
+  const clientName=[data.clientFirst,data.clientLast].filter(Boolean).join(' ');
+  const folderName=`${data.clientLast||'Unknown'}, ${data.clientFirst||'Client'} ${caseAbbr}`;
+  const fileName=`${folderName} — Intake — ${new Date().toLocaleDateString('en-US').replace(/\//g,'-')}.txt`;
+  const submittedDate=new Date().toLocaleString('en-US',{year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'});
+
+  const payload={
+    // Identity fields — used by Zapier for folder name, email subject, file name
+    clientFirst:       data.clientFirst||'',
+    clientLast:        data.clientLast||'',
+    clientPhone:       data.clientPhone||'',
+    clientEmail:       data.clientEmail||'',
+    caseType:          data.caseType||caseType,
+    caseAbbreviation:  caseAbbr,
+    folderName:        folderName,
+    fileName:          fileName,
+    submittedDate:     submittedDate,
+    answerDeadline:    data.answerDeadline||'N/A',
+    daysUntilDeadline: data.daysUntilDeadline!==undefined?data.daysUntilDeadline+' days':'N/A',
+    hearingDate:       data.hearingDate||'None scheduled',
+    // Full intake summary as plain text — paste into Smokeball, feed to Archie
+    fullIntakeSummary: textSummary,
+    // All raw data fields for Zapier mapping
+    ...data
+  };
+
+  // Remove non-serializable / circular fields
+  delete payload.children;
+  delete payload.uccjeaChildren;
+
+  // Re-add children as flat strings
+  if(data.children&&data.children.length>0){
+    data.children.forEach((c,i)=>{
+      payload[`child_${i+1}_name`]=[c.first,c.last].filter(Boolean).join(' ');
+      payload[`child_${i+1}_dob`]=c.dob||'';
+      payload[`child_${i+1}_gender`]=c.gender||'';
+      payload[`child_${i+1}_address_client`]=c.addressWithMe||'';
+      payload[`child_${i+1}_address_other`]=c.addressWithOther||'';
+    });
+  }
+
+  try {
+    await fetch('https://hooks.zapier.com/hooks/catch/2919611/ujfdlzm/',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload),
+      mode:'no-cors'
+    });
+    btn.textContent='✓ Submitted';
+    btn.style.background='var(--teal)';
+  } catch(err){
+    console.error('Zapier error:',err);
+    btn.textContent=orig;
+    btn.disabled=false;
+  }
+
   buildSummary();
   showSection('summary');
 }
